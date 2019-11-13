@@ -32,17 +32,22 @@
 <meta property="og:title" content="Face Denoising with DNNs - Machine Learning" />
 <meta name="author" content="GitHub User" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="This application transmits temperature and humidity from arduino to AWS IoT through wireless connection(WiFi). AWS IoT then store the record into DynamoDB" />
-<meta property="og:description" content="This application transmits temperature and humidity from arduino to AWS IoT through wireless connection(WiFi). AWS IoT then store the record into DynamoDB" />
+<meta name="description" content="Provided models have been trained on 10.000 images 64x64, the dataset is custom made and based on CelebA with a little modification. In our project we had to find the best performing model by only looking at papers and testing it with 2 set of faces: cropped (as close to no-background as possible) and large (as much background as possible) Top row is the input images, the original ones that the NN has never seen before Second row is the noisy images, the input of our NNs Third row is the output images for the WIN5_LARGE model Fourth row is the out images for the WIN5 model" />
+<meta property="og:description" content="Provided models have been trained on 10.000 images 64x64, the dataset is custom made and based on CelebA with a little modification. In our project we had to find the best performing model by only looking at papers and testing it with 2 set of faces: cropped (as close to no-background as possible) and large (as much background as possible) Top row is the input images, the original ones that the NN has never seen before Second row is the noisy images, the input of our NNs Third row is the output images for the WIN5_LARGE model Fourth row is the out images for the WIN5 model" />
 <link rel="canonical" href="http://localhost:4000/python/machine-learning/jupyter/2018/10/21/face-denoising.html" />
 <meta property="og:url" content="http://localhost:4000/python/machine-learning/jupyter/2018/10/21/face-denoising.html" />
 <meta property="og:site_name" content="TanveerJan" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2018-10-21T17:33:36+02:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/python/machine-learning/jupyter/2018/10/21/face-denoising.html"},"url":"http://localhost:4000/python/machine-learning/jupyter/2018/10/21/face-denoising.html","author":{"@type":"Person","name":"GitHub User"},"description":"This application transmits temperature and humidity from arduino to AWS IoT through wireless connection(WiFi). AWS IoT then store the record into DynamoDB","headline":"Face Denoising with DNNs - Machine Learning","dateModified":"2018-10-21T17:33:36+02:00","datePublished":"2018-10-21T17:33:36+02:00","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/python/machine-learning/jupyter/2018/10/21/face-denoising.html"},"url":"http://localhost:4000/python/machine-learning/jupyter/2018/10/21/face-denoising.html","author":{"@type":"Person","name":"GitHub User"},"description":"Provided models have been trained on 10.000 images 64x64, the dataset is custom made and based on CelebA with a little modification. In our project we had to find the best performing model by only looking at papers and testing it with 2 set of faces: cropped (as close to no-background as possible) and large (as much background as possible) Top row is the input images, the original ones that the NN has never seen before Second row is the noisy images, the input of our NNs Third row is the output images for the WIN5_LARGE model Fourth row is the out images for the WIN5 model","headline":"Face Denoising with DNNs - Machine Learning","dateModified":"2018-10-21T17:33:36+02:00","datePublished":"2018-10-21T17:33:36+02:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
+<!--highlightjs Packges-->
+<link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+<!--highlightjs Packges-->
 </head>
 <body>
 	<main class="container">
@@ -63,10 +68,47 @@
     <div class="post-date"><i class="icon-calendar"></i>Oct 21, 2018</div>
   </div>
   <div class="post">
-    <p>This application transmits temperature and humidity from arduino to AWS IoT through wireless connection(WiFi). AWS IoT then store the record into DynamoDB</p>
+    <p>Provided models have been trained on 10.000 images 64x64, the dataset is custom made and based on <a href="http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html">CelebA</a> with a little modification.
+In our project we had to find the best performing model by only looking at papers and testing it with 2 set of faces: <em>cropped</em> (as close to no-background as possible) and <em>large</em> (as much background as possible)
+<img src="https://github.com/JustAnOwlz/Face-Denoising-CASACV/blob/master/output.png" alt="Results table" /></p>
+<ul>
+  <li>Top row is the input images, the original ones that the NN has never seen before</li>
+  <li>Second row is the noisy images, the input of our NNs</li>
+  <li>Third row is the output images for the WIN5_LARGE model</li>
+  <li>Fourth row is the out images for the WIN5 model</li>
+</ul>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">Code</span> <span class="nx">to</span> <span class="nx">be</span> <span class="nx">pasted</span> <span class="nx">here</span>
+<p>We provide a <a href="https://github.com/JustAnOwlz/Face-Denoising-CASACV/blob/master/whitepaper.pdf">whitepaper</a> for better understanding of the process that made this models possible.</p>
+
+<h3 id="models-and-hardware-requirements">Models and Hardware requirements</h3>
+<p>The models have been trained on a nVidia Quadro P4000, each epochs took 93-95 seconds.</p>
+
+<ul>
+  <li><strong><em>WIN5</em></strong> model was trained for 75 epochs, ispired by <a href="https://arxiv.org/abs/1707.09135">Peng Liu, Ruogu Fang</a></li>
+  <li><strong><em>WIN5_BW</em></strong> model was trained for 25~ epochs</li>
+  <li><strong><em>WIN5_LARGE</em></strong> model was trained for 25 epochs</li>
+  <li><strong><em>DNCNN_BW</em></strong> was trained for 27~ epochs, inspired by <a href="https://arxiv.org/abs/1608.03981">Kai Zhang et al.</a></li>
+  <li><strong><em>DNCNN</em></strong> was trained for 25~ epochs</li>
+</ul>
+
+<h3 id="how-to-runinstall">How to run/install</h3>
+<p>To run the model trainer:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/JustAnOwlz/Face-Denoising-CASACV.git
+cd Face-Denoising-CASACV
+pip install -r requirements.txt
+python model_trainer_edited.py
 </code></pre></div></div>
+
+<p>The dataset examples are in the <code class="highlighter-rouge">file dataset</code> folder, to generate them you can use the file <code class="highlighter-rouge">script.py</code> but you have to modify it based on what you need.</p>
+
+<h3 id="collaborators">Collaborators</h3>
+<p>The project was build from the ground up by our team:</p>
+<ul>
+  <li>Luca Di Luccio - <a href="https://github.com/Owlz">Owlz</a></li>
+  <li>Simone Faiella - <a href="https://github.com/SimoneFaiella">SimoneFaiella</a></li>
+  <li>Jan, Muhammad Tanveer - <a href="https://github.com/tjan90">tjan90</a></li>
+  <li>Marialuisa Trerè - <a href="https://github.com/mery00">mery00</a></li>
+</ul>
 
   </div></div>
 

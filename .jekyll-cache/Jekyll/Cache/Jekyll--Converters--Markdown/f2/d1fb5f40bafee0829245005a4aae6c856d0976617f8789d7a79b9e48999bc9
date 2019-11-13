@@ -1,0 +1,3 @@
+I"g<p>Requesting details of movies or tv series to you telegram app using serverless platform. <br />
+This is a simple function made for <a href="https://nuclio.io">Nuclio</a>, an open source and managed serverless platform that we can run on our home server. It uses <a href="https://www.rabbitmq.com/">RabbitMQ</a> as broker to share MQTT messages around.</p>
+:ET

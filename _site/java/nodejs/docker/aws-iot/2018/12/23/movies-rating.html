@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--MDB Packges-->
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/css/mdb.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://localhost:4000/assets/all.css">
+<script type="text/javascript" scr="http://localhost:4000/assets/all.js"></script>
+<script src="https://kit.fontawesome.com/286282a869.js"></script>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/js/mdb.min.js"></script>
+<!--MDB Packges-->
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Movies/TVSeries Rating</title>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Movies/TVSeries Rating | TanveerJan</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Movies/TVSeries Rating" />
+<meta name="author" content="GitHub User" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Requesting details of movies or tv series to you telegram app using serverless platform. This is a simple function made for Nuclio, an open source and managed serverless platform that we can run on our home server. It uses RabbitMQ as broker to share MQTT messages around." />
+<meta property="og:description" content="Requesting details of movies or tv series to you telegram app using serverless platform. This is a simple function made for Nuclio, an open source and managed serverless platform that we can run on our home server. It uses RabbitMQ as broker to share MQTT messages around." />
+<link rel="canonical" href="http://localhost:4000/java/nodejs/docker/aws-iot/2018/12/23/movies-rating.html" />
+<meta property="og:url" content="http://localhost:4000/java/nodejs/docker/aws-iot/2018/12/23/movies-rating.html" />
+<meta property="og:site_name" content="TanveerJan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-12-23T16:33:36+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/java/nodejs/docker/aws-iot/2018/12/23/movies-rating.html"},"url":"http://localhost:4000/java/nodejs/docker/aws-iot/2018/12/23/movies-rating.html","author":{"@type":"Person","name":"GitHub User"},"description":"Requesting details of movies or tv series to you telegram app using serverless platform. This is a simple function made for Nuclio, an open source and managed serverless platform that we can run on our home server. It uses RabbitMQ as broker to share MQTT messages around.","headline":"Movies/TVSeries Rating","dateModified":"2018-12-23T16:33:36+01:00","datePublished":"2018-12-23T16:33:36+01:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<!--highlightjs Packges-->
+<link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+<!--highlightjs Packges-->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img class="img-fluid" src="/assets/Profile_pic.jpg" alt="Tanveer Jan">
+			<h2>Tanveer Jan</h2>
+			<p class="tagline">Developer</p>
+			<ul class="social"><a href="https://github.com/tjan90"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/tanveer-jan-03059042/"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/Tanveer_Jan90"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2019</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/java/nodejs/docker/aws-iot/2018/12/23/movies-rating.html">
+    <h2 class="post-title">Movies/TVSeries Rating</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"><li>java</li><li>NodeJS</li><li>docker</li><li>AWS-IoT</li></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Dec 23, 2018</div>
+  </div>
+  <div class="post">
+    <p>Requesting details of movies or tv series to you telegram app using serverless platform. <br />
+This is a simple function made for <a href="https://nuclio.io">Nuclio</a>, an open source and managed serverless platform that we can run on our home server. It uses <a href="https://www.rabbitmq.com/">RabbitMQ</a> as broker to share MQTT messages around.</p>
+
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+  <li><a href="https://www.docker.com/">Docker</a></li>
+  <li><a href="https://nodejs.org/">Node.js</a></li>
+</ul>
+
+<h3 id="how-to-use-it">How to use it</h3>
+<p>Clone this repository:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git clone https://github.com/tjan90/Movies-TVSeries-Ratings-.git
+$ cd Movies-TVSeries-Ratings-
+</code></pre></div></div>
+<p>Start up a docker instance of Nuclio:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo docker run -p 8070:8070 -v /var/run/docker.sock:/var/run/docker.sock -v /tmp:/tmp nuclio/dashboard:stable-amd64
+</code></pre></div></div>
+<p>Start up a docker instance of RabbitMQ:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ sudo docker run -p 9000:15672  -p 1883:1883 -p 5672:5672  cyrilix/rabbitmq-mqtt
+</code></pre></div></div>
+
+<p>Make an applet on <a href="https://ifttt.com/">IFTTT</a> to forward the details found to Telegram app.
+Obtain an API key from the OMDB’s API and place them inside <code class="highlighter-rouge">logger.js</code>. Remember to add your IP in the right spot</p>
+
+<p>Browse to http://localhost:8070, create a project, load the <code class="highlighter-rouge">mqttconsume2.yaml</code> file and deploy it. Anything should work just fine.</p>
+
+<h4 id="how-to-run-the-loggerjs">How to run the logger.js</h4>
+<p>Open a terminal, browse to the Movies-TVSeries-Ratings- folder and install the dependencies:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ npm install
+</code></pre></div></div>
+<p>Run the file logger.js</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ node logger.js
+</code></pre></div></div>
+
+<h3 id="working">Working</h3>
+<p>Note that every programmer has its own way of coding, so is mine. I am a little obsessed with using the code on my desktop apps so that why i wrote all of my code in a logger.js file.
+The best practice will be to write the code inside the nuclio function where all the operation of  serverless take place.</p>
+
+<p>So here is a little explanation of what actually if happening behind the scenes</p>
+
+<p>You write name of the movie/tvseries with name of the IFTTT applet like “The Blackist,Telegram_notification” in the nuclio function body and press the test to pass the data to logger. The logger.js will look the details of Movie/Tvseries in OMDB. It will pull the Name, Total Seasons and Rating and then will forward it through Webhook via IFTTT applet.</p>
+
+<h3 id="further-developement">Further developement</h3>
+<p>This function pass the data through nuclio function body, further development can be made by integrating MQTT client.</p>
+
+<h3 id="technology-used">Technology used</h3>
+<ul>
+  <li><a href="https://nuclio.io">Nuclio</a></li>
+  <li><a href="https://www.rabbitmq.com/">RabbitMQ</a></li>
+  <li><a href="https://ifttt.com/">IFTTT</a></li>
+</ul>
+
+<p>Also APIs from:</p>
+<ul>
+  <li><a href="https://www.omdbapi.com/">OMDB</a></li>
+</ul>
+
+  </div></div>
+
+		</section>
+	</main></body>
+</html>

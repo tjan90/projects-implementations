@@ -1,0 +1,187 @@
+I"ÌE<p>This application transmits temperature and humidity from arduino to AWS IoT through wireless connection(WiFi). AWS IoT then store the record into DynamoDB</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;ArduinoBearSSL.h&gt;
+#include &lt;ArduinoECCX08.h&gt;
+#include &lt;ArduinoMqttClient.h&gt;
+#include &lt;WiFiNINA.h&gt; // change to #include &lt;WiFi101.h&gt; for MKR1000
+#include &lt;DHT.h&gt;
+#include &lt;BH1750.h&gt;
+#include &lt;Wire.h&gt;
+#include "arduino_secrets.h"
+</span><span class="n">BH1750</span> <span class="nf">lightMeter</span><span class="p">(</span><span class="mh">0x23</span><span class="p">);</span>
+<span class="kt">float</span> <span class="n">lux</span><span class="p">;</span>
+
+<span class="c1">/////// Enter your sensitive data in arduino_secrets.h</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">ssid</span><span class="p">[]</span>        <span class="o">=</span> <span class="n">SECRET_SSID</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">pass</span><span class="p">[]</span>        <span class="o">=</span> <span class="n">SECRET_PASS</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">broker</span><span class="p">[]</span>      <span class="o">=</span> <span class="n">SECRET_BROKER</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">certificate</span>  <span class="o">=</span> <span class="n">SECRET_CERTIFICATE</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">LCD_COLS</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">int</span> <span class="n">LCD_ROWS</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">WiFiClient</span>    <span class="n">wifiClient</span><span class="p">;</span>            <span class="c1">// Used for the TCP socket connection</span>
+<span class="n">BearSSLClient</span> <span class="nf">sslClient</span><span class="p">(</span><span class="n">wifiClient</span><span class="p">);</span> <span class="c1">// Used for SSL/TLS connection, integrates with ECC508</span>
+<span class="n">MqttClient</span>    <span class="nf">mqttClient</span><span class="p">(</span><span class="n">sslClient</span><span class="p">);</span>
+
+<span class="cp">#define DHTPIN A5     // what pin we're connected to
+#define DHTTYPE DHT22   // DHT 22  (AM2302)
+</span><span class="n">DHT</span> <span class="nf">dht</span><span class="p">(</span><span class="n">DHTPIN</span><span class="p">,</span> <span class="n">DHTTYPE</span><span class="p">);</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">lastMillis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">lightVal</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">temperatureVal</span><span class="p">;</span>
+<span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="mi">115200</span><span class="p">);</span>
+  <span class="n">dht</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+  <span class="n">Wire</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+  <span class="n">lightMeter</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">Serial</span><span class="p">);</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ECCX08</span><span class="p">.</span><span class="n">begin</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"No ECCX08 present!"</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Set a callback to get the current time</span>
+  <span class="c1">// used to validate the servers certificate</span>
+  <span class="n">ArduinoBearSSL</span><span class="p">.</span><span class="n">onGetTime</span><span class="p">(</span><span class="n">getTime</span><span class="p">);</span>
+
+  <span class="c1">// Set the ECCX08 slot to use for the private key</span>
+  <span class="c1">// and the accompanying public certificate for it</span>
+  <span class="n">sslClient</span><span class="p">.</span><span class="n">setEccSlot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">certificate</span><span class="p">);</span>
+
+  <span class="c1">// Optional, set the client id used for MQTT,</span>
+  <span class="c1">// each device that is connected to the broker</span>
+  <span class="c1">// must have a unique client id. The MQTTClient will generate</span>
+  <span class="c1">// a client id for you based on the millis() value if not set</span>
+  <span class="c1">//</span>
+  <span class="c1">// mqttClient.setId("clientId");</span>
+
+  <span class="c1">// Set the message callback, this function is</span>
+  <span class="c1">// called when the MQTTClient receives a message</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">onMessage</span><span class="p">(</span><span class="n">onMessageReceived</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">loop</span><span class="p">()</span> <span class="p">{</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">WiFi</span><span class="p">.</span><span class="n">status</span><span class="p">()</span> <span class="o">!=</span> <span class="n">WL_CONNECTED</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">connectWiFi</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">mqttClient</span><span class="p">.</span><span class="n">connected</span><span class="p">())</span> <span class="p">{</span>
+    <span class="c1">// MQTT client is disconnected, connect</span>
+    <span class="n">connectMQTT</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="c1">// poll for new MQTT messages and send keep alives</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">poll</span><span class="p">();</span>
+
+  <span class="c1">// publish a message roughly every 5 seconds.</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">millis</span><span class="p">()</span> <span class="o">-</span> <span class="n">lastMillis</span> <span class="o">&gt;</span> <span class="mi">5000</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">lastMillis</span> <span class="o">=</span> <span class="n">millis</span><span class="p">();</span>
+    <span class="kt">int</span> <span class="n">lightVal</span> <span class="o">=</span> <span class="n">analogRead</span><span class="p">(</span><span class="n">A4</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">lightVal</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+     <span class="n">publishMessage</span><span class="p">();</span>
+    <span class="p">}</span>
+
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">unsigned</span> <span class="kt">long</span> <span class="nf">getTime</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// get the current time from the WiFi module  </span>
+  <span class="k">return</span> <span class="n">WiFi</span><span class="p">.</span><span class="n">getTime</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">connectWiFi</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Attempting to connect to SSID: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">ssid</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">" "</span><span class="p">);</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="n">WiFi</span><span class="p">.</span><span class="n">begin</span><span class="p">(</span><span class="n">ssid</span><span class="p">,</span> <span class="n">pass</span><span class="p">)</span> <span class="o">!=</span> <span class="n">WL_CONNECTED</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// failed, retry</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"You're connected to the network"</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">connectMQTT</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Attempting to MQTT broker: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">broker</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">" "</span><span class="p">);</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">mqttClient</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">broker</span><span class="p">,</span> <span class="mi">8883</span><span class="p">))</span> <span class="p">{</span>
+    <span class="c1">// failed, retry</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"."</span><span class="p">);</span>
+    <span class="n">delay</span><span class="p">(</span><span class="mi">5000</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"You're connected to the MQTT broker"</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+
+  <span class="c1">// subscribe to a topic</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">subscribe</span><span class="p">(</span><span class="s">"arduino/incoming"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">publishMessage</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">lux</span> <span class="o">=</span> <span class="n">lightMeter</span><span class="p">.</span><span class="n">readLightLevel</span><span class="p">();</span>
+  <span class="c1">//lightVal = analogRead(A4);</span>
+  <span class="n">temperatureVal</span> <span class="o">=</span> <span class="n">dht</span><span class="p">.</span><span class="n">readTemperature</span><span class="p">();</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Publishing message"</span><span class="p">);</span>
+  <span class="c1">//Serial.println("Light:");</span>
+  <span class="c1">//Serial.println(lightVal);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"temperature: "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">temperatureVal</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"light : "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="n">lux</span><span class="p">);</span>
+
+  <span class="c1">// send message, the Print interface can be used to set the message contents</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">beginMessage</span><span class="p">(</span><span class="s">"arduino/outgoing"</span><span class="p">);</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"light:"</span><span class="p">);</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">lux</span><span class="p">);</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">", Temp: "</span><span class="p">);</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">temperatureVal</span><span class="p">);</span>
+  <span class="n">mqttClient</span><span class="p">.</span><span class="n">endMessage</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">onMessageReceived</span><span class="p">(</span><span class="kt">int</span> <span class="n">messageSize</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// we received a message, print out the topic and contents</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"Received a message with topic '"</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">mqttClient</span><span class="p">.</span><span class="n">messageTopic</span><span class="p">());</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">"', length "</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">messageSize</span><span class="p">);</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">" bytes:"</span><span class="p">);</span>
+
+  <span class="c1">// use the Stream interface to print the contents</span>
+  <span class="k">while</span> <span class="p">(</span><span class="n">mqttClient</span><span class="p">.</span><span class="n">available</span><span class="p">())</span> <span class="p">{</span>
+    <span class="n">Serial</span><span class="p">.</span><span class="n">print</span><span class="p">((</span><span class="kt">char</span><span class="p">)</span><span class="n">mqttClient</span><span class="p">.</span><span class="n">read</span><span class="p">());</span>
+  <span class="p">}</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Seperate tab should also be created and filled the credentials for wireless connection and certificates fro AWS-IoT</p>
+
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Fill in  your WiFi networks SSID and password</span>
+<span class="cp">#define SECRET_SSID "SSID Here"
+#define SECRET_PASS "Password Here"
+</span>
+<span class="c1">// Fill in the hostname of your AWS IoT broker</span>
+<span class="cp">#define SECRET_BROKER "endpoint address here"
+</span>
+<span class="c1">// Fill in the boards public certificate</span>
+<span class="k">const</span> <span class="kt">char</span> <span class="n">SECRET_CERTIFICATE</span><span class="p">[]</span> <span class="o">=</span> <span class="n">R</span><span class="s">"(</span><span class="err">
+</span><span class="s">-----BEGIN CERTIFICATE-----</span><span class="err">
+</span><span class="s">YOUR AWS-IoT Certificate here</span><span class="err">
+</span><span class="s">-----END CERTIFICATE-----</span><span class="err">
+</span><span class="s">)"</span><span class="p">;</span>
+</code></pre></div></div>
+:ET
