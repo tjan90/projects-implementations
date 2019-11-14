@@ -9,4 +9,4 @@ Responsive & Interactive Web Application for visualizing Hypergraphs.
 Project can be found on Github\
 Github : [https://github.com/hypergraph-repository/hypergraph-repository.github.io.git](https://github.com/hypergraph-repository/hypergraph-repository.github.io.git)
 
-![Hypergraph-Web-Application](/assets/hypergraph.png)
+![Hypergraph-Web-Application](https://github.com/tjan90/projects-implementations/blob/master/assets/hypergraph.png)
