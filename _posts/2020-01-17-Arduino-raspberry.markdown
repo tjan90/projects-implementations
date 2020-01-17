@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Arduino MKR1010 WiFi - AWS IoT Core"
+title:  "Connecting Arduino with Raspberry"
 date:   2019-10-23 21:03:36 +0530
 categories: C Arduino RaspberryPi Mosquitto
 ---
