@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Connecting Arduino with Raspberry"
-date:   2019-10-23 21:03:36 +0530
+date:   2020-01-17
 categories: C Arduino RaspberryPi Mosquitto
 ---
 Application designed to sending data to user via MQTT. Arduino acts as the sensor connected via WiFi and communicate with broker, which is installed in Raspberry. MQTT Client app is required in ur phone to monitor the data you will receive.
