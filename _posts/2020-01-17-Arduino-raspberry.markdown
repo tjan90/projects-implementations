@@ -67,9 +67,9 @@ the above command is to install mqtt mosquitto broker.
 Below is the code to setup wifi connection and credential for connect to raspberry.
 
 Certain things must be configured in order to make this network
-- WiFi credentials
+- WiFi credentials\n
 WiFi details are found in arduino_secrets.h file that is int he project directory, process is same as we did in the AWS IoT connection but without certificate. Certificate are only required if you are using SSL connection or some sort on encryption library like WolfSSL or SharkSSL.
-- MQTT broker details
+- MQTT broker details\n
 MQTT broker details are IP address of the broker, Port of broker and topic to which device is subscribed.
 
 ```
