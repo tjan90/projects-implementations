@@ -10,7 +10,7 @@ Application designed to sending data to user via MQTT. Arduino acts as the senso
 Arduino Uno WiFi Rev2
 Raspberry Pi 3B
 LCD Display (Optional)
-MQTTClient (Andriod/iOS)
+MQTTClient (Andriod/iOS).
 
 
 ###Setting Up:
