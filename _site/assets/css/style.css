@@ -386,7 +386,7 @@ main .about img { max-width: 150px; }
 
 .post-title { line-height: 1.2em; font-size: 16px; }
 
-.card-header { padding: 0.25rem 0.50rem; }
+.card-header { padding: 0.10rem 1.50rem; }
 
 .card-footer { padding: 0.75rem 1.00rem 0.15rem 1.0rem; }
 
