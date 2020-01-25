@@ -43,21 +43,21 @@ main {
 
 	@media screen and (min-width: $bigScreenW) {
 		margin: 0 auto;
-		max-width: 1440px;	
+		max-width: 1440px;
 	}
 	@media screen and (max-width: 1280px) {
-		margin: 0 75px;	
+		margin: 0 75px;
 	}
 	@media screen and (max-width: 1024px){
-		margin: 0 35px;	
+		margin: 0 35px;
 	}
 
 	@media screen and (max-width: $mobileW) {
 		margin: 0 10px;
-		flex-direction: column;	
+		flex-direction: column;
 	}
 	@media screen and (max-width: $smallMobileW) {
-		margin: 0;	
+		margin: 0;
 	}
 
 	.content {
@@ -72,7 +72,7 @@ main {
 		height: 100vh;
 		padding-bottom: 15vh;
 		@media screen and (max-width: $mobileW) {
-			height: auto;	
+			height: auto;
 			padding: 10vh 0;
 		}
 		@media screen and (min-width: $mobileW + 1) {
@@ -139,7 +139,7 @@ main {
 	align-items: center;
 	@media screen and (max-width: $mobileW){
 		flex-direction: column-reverse;
-		align-items: baseline;	
+		align-items: baseline;
 		.post-date {
 			margin-bottom: 16px;
 		}
@@ -151,17 +151,24 @@ main {
 
 .post-title {
 	line-height: 1.2em;
-	font-size: 28px;
+	font-size: 16px;
+}
+.card-header{
+	padding: 0.25rem 0.50rem;
+
+}
+.card-footer{
+padding: 0.75rem 1.00rem 0.15rem 1.0rem;
 }
 .posts, .post-container {
 	list-style-type: none;
-	margin: 45px 30px;
+	margin: 45px 0 0 0;
 	@media screen and (max-width: $smallMobileW){
 		margin-left: 20px;
 		margin-right: 20px;
 	}
 	@media screen and (max-width: $mobileW){
-		padding: 0 !important;	
+		padding: 0 !important;
 		margin-top: 0;
 	}
 }

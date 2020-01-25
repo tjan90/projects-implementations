@@ -1,4 +1,4 @@
-I"ÌE<p>This application transmits temperature and humidity from arduino to AWS IoT through wireless connection(WiFi). AWS IoT then store the record into DynamoDB</p>
+I"ÓE<p>This application transmits temperature and humidity from arduino to AWS IoT through wireless connection(WiFi). AWS IoT then store the record into DynamoDB.</p>
 
 <div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include &lt;ArduinoBearSSL.h&gt;
 #include &lt;ArduinoECCX08.h&gt;

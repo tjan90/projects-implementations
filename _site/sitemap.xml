@@ -9,6 +9,11 @@
             <lastmod>2019-06-07T00:00:00+00:00</lastmod>
             <priority>1.00</priority>
         </url><url>
+                <loc>http://localhost:4000/c/arduino/raspberrypi/mosquitto/2020/01/17/Arduino-raspberry.html</loc>
+                <lastmod>2020-01-17T00:00:00+01:00</lastmod>
+                <changefreq>weekly</changefreq>
+                <priority>0.80</priority>
+            </url><url>
                 <loc>http://localhost:4000/c/arduino/2019/10/23/welcome-to-jekyll.html</loc>
                 <lastmod>2019-10-23T17:33:36+02:00</lastmod>
                 <changefreq>weekly</changefreq>

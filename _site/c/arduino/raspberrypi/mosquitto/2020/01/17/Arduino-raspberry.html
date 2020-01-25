@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--MDB Packges-->
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/css/mdb.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://localhost:4000/assets/all.css">
+<script type="text/javascript" scr="http://localhost:4000/assets/all.js"></script>
+<script src="https://kit.fontawesome.com/286282a869.js"></script>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/js/mdb.min.js"></script>
+<!--MDB Packges-->
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Connecting Arduino with Raspberry</title>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Connecting Arduino with Raspberry | TanveerJan</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Connecting Arduino with Raspberry" />
+<meta name="author" content="GitHub User" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Application designed to sending data to user via MQTT. Arduino acts as the sensor connected via WiFi and communicate with broker, which is installed in Raspberry. MQTT Client app is required in ur phone to monitor the data you will receive." />
+<meta property="og:description" content="Application designed to sending data to user via MQTT. Arduino acts as the sensor connected via WiFi and communicate with broker, which is installed in Raspberry. MQTT Client app is required in ur phone to monitor the data you will receive." />
+<link rel="canonical" href="http://localhost:4000/c/arduino/raspberrypi/mosquitto/2020/01/17/Arduino-raspberry.html" />
+<meta property="og:url" content="http://localhost:4000/c/arduino/raspberrypi/mosquitto/2020/01/17/Arduino-raspberry.html" />
+<meta property="og:site_name" content="TanveerJan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-01-17T00:00:00+01:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/c/arduino/raspberrypi/mosquitto/2020/01/17/Arduino-raspberry.html"},"url":"http://localhost:4000/c/arduino/raspberrypi/mosquitto/2020/01/17/Arduino-raspberry.html","author":{"@type":"Person","name":"GitHub User"},"description":"Application designed to sending data to user via MQTT. Arduino acts as the sensor connected via WiFi and communicate with broker, which is installed in Raspberry. MQTT Client app is required in ur phone to monitor the data you will receive.","headline":"Connecting Arduino with Raspberry","dateModified":"2020-01-17T00:00:00+01:00","datePublished":"2020-01-17T00:00:00+01:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<!--highlightjs Packges-->
+<link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+<!--highlightjs Packges-->
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img class="img-fluid" src="/assets/Profile_pic.jpg" alt="Tanveer Jan">
+			<h2>Tanveer Jan</h2>
+			<p class="tagline">Developer</p>
+			<ul class="social"><a href="https://github.com/tjan90"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/tanveer-jan-03059042/"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/Tanveer_Jan90"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2019</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/c/arduino/raspberrypi/mosquitto/2020/01/17/Arduino-raspberry.html">
+    <h2 class="post-title">Connecting Arduino with Raspberry</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"><li>C</li><li>Arduino</li><li>RaspberryPi</li><li>Mosquitto</li></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Jan 17, 2020</div>
+  </div>
+  <div class="post">
+    <p>Application designed to sending data to user via MQTT. Arduino acts as the sensor connected via WiFi and communicate with broker, which is installed in Raspberry. MQTT Client app is required in ur phone to monitor the data you will receive.</p>
+
+<p>###Hardware Requirements:
+Arduino Uno WiFi Rev2
+Raspberry Pi 3B
+LCD Display (Optional)
+MQTTClient (Andriod/iOS).</p>
+
+<p>###Setting Up:
+####Raspberry Pi
+Firs we need to setup the raspberry to work as broker, so we need to install mosquitto.</p>
+
+<p>Here is the link to setup mosquitto on raspberry.</p>
+
+<p>To use the new repository you should first import the repository package signing key follow the below comman, the wget command is used to download single file and stores in a current directory.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
+
+sudo apt-key add mosquitto-repo.gpg.key
+</code></pre></div></div>
+
+<p>Then make the repository available to apt</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /etc/apt/sources.list.d/
+</code></pre></div></div>
+
+<p>Enter the following</p>
+
+<p>for wheezy</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo wget http://repo.mosquitto.org/debian/mosquitto-wheezy.list
+
+</code></pre></div></div>
+<p>for jessie</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo wget http://repo.mosquitto.org/debian/mosquitto-wheezy.list
+
+</code></pre></div></div>
+
+<p>to install the mqtt mosquitto for the raspberry pi follow the below steps use sudo before the command if not using root</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -i
+</code></pre></div></div>
+<p>The above command is not mandatory ,it is if you wish to use root or you will need to prefix each below command with sudo eg sudo apt-get update</p>
+
+<p>The below command is used to update the source list</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get update
+</code></pre></div></div>
+<p>After updating type the following commands to install mosquitto broker as shown in the image 1.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get install mosquitto
+</code></pre></div></div>
+<p>the above command is to install mqtt mosquitto broker.</p>
+
+<p>####Arduino
+Below is the code to setup wifi connection and credential for connect to raspberry.</p>
+
+<p>Certain things must be configured in order to make this network</p>
+<ul>
+  <li>WiFi credentials\n
+WiFi details are found in arduino_secrets.h file that is int he project directory, process is same as we did in the AWS IoT connection but without certificate. Certificate are only required if you are using SSL connection or some sort on encryption library like WolfSSL or SharkSSL.</li>
+  <li>MQTT broker details\n
+MQTT broker details are IP address of the broker, Port of broker and topic to which device is subscribed.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;ArduinoMqttClient.h&gt;
+#include &lt;WiFiNINA.h&gt; // for MKR1000 change to: #include &lt;WiFi101.h&gt;
+#include &lt;DHT.h&gt;
+#include &lt;BH1750.h&gt;
+#include &lt;Wire.h&gt;
+#include &lt;hd44780.h&gt;
+#include &lt;hd44780ioClass/hd44780_I2Cexp.h&gt;
+hd44780_I2Cexp lcd;
+
+#include "arduino_secrets.h"
+///////please enter your sensitive data in the Secret tab/arduino_secrets.h
+char ssid[] = SECRET_SSID;        // your network SSID (name)
+char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
+BH1750 lightMeter(0x6B);
+float lux;
+WiFiClient wifiClient;
+MqttClient mqttClient(wifiClient);
+const int LCD_COLS = 20;
+const int LCD_ROWS = 4;
+int sensorpin = A0;
+int ledPin = 7;
+int val = 0;
+
+const char broker[] = "172.20.10.6";
+int        port     = 1883;
+const char topic[]  = "arduino/simple";
+
+const long interval = 1000;
+unsigned long previousMillis = 0;
+
+int count = 0;
+
+#define DHTPIN 2     // what pin we're connected to
+#define DHTTYPE DHT22   // DHT 22  (AM2302)
+DHT dht(DHTPIN, DHTTYPE);
+
+unsigned long lastMillis = 0;
+
+int lightVal;
+float temperatureVal;
+void setup() {
+  //Initialize serial and wait for port to open:
+  Serial.begin(9600);
+  dht.begin();
+  Wire.begin();
+  lightMeter.begin();
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
+    pinMode(ledPin, OUTPUT);
+  int status;
+  status = lcd.begin(LCD_COLS, LCD_ROWS);
+
+  // attempt to connect to Wifi network:
+  Serial.print("Attempting to connect to WPA SSID: ");
+  Serial.println(ssid);
+  while (WiFi.begin(ssid, pass) != WL_CONNECTED) {
+    // failed, retry
+    Serial.print(".");
+    delay(5000);
+  }
+
+  Serial.println("You're connected to the network");
+  Serial.println(WiFi.localIP());
+
+  // You can provide a unique client ID, if not set the library uses Arduino-millis()
+  // Each client must have a unique client ID
+  // mqttClient.setId("clientId");
+
+  // You can provide a username and password for authentication
+  // mqttClient.setUsernamePassword("username", "password");
+
+  Serial.print("Attempting to connect to the MQTT broker: ");
+  Serial.println(broker);
+
+  if (!mqttClient.connect(broker, port)) {
+    Serial.print("MQTT connection failed! Error code = ");
+    Serial.println(mqttClient.connectError());
+
+    while (1);
+  }
+
+  Serial.println("You're connected to the MQTT broker!");
+  Serial.println();
+}
+
+void loop() {
+  lcd.setCursor(0,0);
+  lcd.print("Smart Agriculture");
+  lcd.setCursor(0,1);
+
+  val = analogRead(sensorpin);      
+  Serial.println(val);
+  lcd.print("Current Temp: ");
+  lcd.print(val-25);
+  lcd.setCursor(0,2);
+  lcd.print("Current Humid: ");
+  lcd.print(val);
+
+   lux = lightMeter.readLightLevel();
+    //lightVal = analogRead(A4);
+    temperatureVal = dht.readTemperature();
+  // call poll() regularly to allow the library to send MQTT keep alives which
+  // avoids being disconnected by the broker
+  mqttClient.poll();
+
+  // avoid having delays in loop, we'll use the strategy from BlinkWithoutDelay
+  // see: File -&gt; Examples -&gt; 02.Digital -&gt; BlinkWithoutDelay for more info
+  unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis &gt;= interval) {
+    // save the last time a message was sent
+    previousMillis = currentMillis;
+
+    Serial.println("\nSending message to topic: ");
+    Serial.println(topic);
+    Serial.print("light:");
+    Serial.print(val);
+    Serial.print(", Temp: ");
+    Serial.print(val-25);
+
+
+    mqttClient.beginMessage(topic);
+    mqttClient.print("light:");
+    mqttClient.print(val);
+    mqttClient.print(", Temp: ");
+    mqttClient.print(val-25);
+    mqttClient.endMessage();
+
+
+  }
+  delay(3000);
+}
+</code></pre></div></div>
+
+  </div></div>
+
+		</section>
+		<section class="">aaaa</section>
+	</main></body>
+</html>

@@ -9,18 +9,31 @@ layout: default
 {{ content }}
 
 {%- if site.posts.size > 0 -%}
+<h1 id="posts-label">posts</h1>
+<div class="container-fluid">
 <ul class="posts">
-  <li>
-    <h1 id="posts-label">posts</h1>
-  </li>
 
   {%- for post in site.posts -%}
+
   <li>
     {%- assign date_format = site.plainwhite.date_format | default: "%b %-d, %Y" -%}
-    <a class="post-link" href="{{ post.url | relative_url }}">
-      <h2 class="post-title">{{ post.title | escape }}</h2>
-    </a>
-    <div class="post-meta">
+    <div class="card">
+      <div class="card-header tempting-azure-gradient">
+        <a class="post-link" href="{{ post.url | relative_url }}">
+        <h2 class="post-title">{{ post.title | escape }}</h2>
+      </a>
+      </div>
+
+      <div class="card-body">
+
+    <div class="post">
+      {%- if site.show_excerpts -%}
+      {{ post.excerpt }}
+      {%- endif -%}
+    </div>
+    </div>
+    <div class="card-footer">
+      <div class="post-meta">
       <ul class="post-categories">
         {%- for tag in post.categories -%}
         <li>{{ tag }}</li>
@@ -28,16 +41,12 @@ layout: default
       </ul>
       <div class="post-date"><i class="icon-calendar"></i>{{ post.date | date: date_format }}</div>
     </div>
-    <div class="post">
-      {%- if site.show_excerpts -%}
-      {{ post.excerpt }}
-      {%- endif -%}
     </div>
   </li>
+  <br>
   {%- endfor -%}
 </ul>
 
-<!-- <p class="feed-subscribe"><svg class="svg-icon orange">
-		<use xlink:href="{{ '/assets/minima-social-icons.svg#rss' | relative_url }}"></use>
-	</svg><a href="{{ "/feed.xml" | relative_url }}">Subscribe</a></p> -->
+</div>
+
 {%- endif -%}
