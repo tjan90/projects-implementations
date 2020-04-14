@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Real-Time object detector with Tensorflow and OpenCV"
-date:   2020-01-17
+date:   2020-04-14
 categories: Tensorflow OpenCV Python Machine-Learning
 ---
 
