@@ -10,7 +10,7 @@ This is application for detecting objects in real-time using any sort of camera.
 Requirements:
  - Python 3.6
  - Tensorflow v1
- - (Protobuf)[https://github.com/protocolbuffers/protobuf/tree/master/python]
+ - [Protobuf](https://github.com/protocolbuffers/protobuf/tree/master/python)
  - OpenCV
 
  Here is the code
