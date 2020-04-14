@@ -13,7 +13,8 @@ Requirements:
  - [Protobuf](https://github.com/protocolbuffers/protobuf/tree/master/python)
  - OpenCV
 
-Objects detector (/assets/object-detector.png)
+ <img class="img-fluid" src="{{ "/assets/object-detector.png" | relative_url }}" alt="{{ site.plainwhite.name }}">
+
  Here is the code
 
  ```
