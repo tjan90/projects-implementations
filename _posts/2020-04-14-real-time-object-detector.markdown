@@ -13,6 +13,7 @@ Requirements:
  - [Protobuf](https://github.com/protocolbuffers/protobuf/tree/master/python)
  - OpenCV
 
+Objects detector (/assets/object-detector.png)
  Here is the code
 
  ```
