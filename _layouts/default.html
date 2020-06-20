@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	{%- include head.html -%}
+	{%- include google-analytics.html -%}
 </head>
 <body>
 	<main class="container">
@@ -25,7 +26,7 @@
 		<section class="content">
 			{{ content }}
 		</section>
-		
+
 	</main>
 	{%- if site.plainwhite.analytics_id -%}
 	<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.plainwhite.analytics_id }}"></script>
