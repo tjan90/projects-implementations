@@ -1,0 +1,2 @@
+I"!<p>This is application for detecting objects in real-time using any sort of camera. Usage of camera in done through openCV. Basically openCV gets a single frame from the camera and pass it to pre-trained tensorflow model. The tensorflow return the frame with objects identified in it.</p>
+:ET
