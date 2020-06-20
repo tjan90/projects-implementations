@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--MDB Packges-->
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/css/mdb.min.css" rel="stylesheet">
+<link rel="stylesheet" href="http://localhost:4000/assets/all.css">
+<script type="text/javascript" scr="http://localhost:4000/assets/all.js"></script>
+<script src="https://kit.fontawesome.com/286282a869.js"></script>
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.5/js/mdb.min.js"></script>
+<!--MDB Packges-->
+<link href="https://fonts.googleapis.com/css?family=Merriweather:300|Raleway:400,700" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/style.css">
+<title>Real-Time object detector with Tensorflow and OpenCV</title>
+<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Real-Time object detector with Tensorflow and OpenCV | TanveerJan</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Real-Time object detector with Tensorflow and OpenCV" />
+<meta name="author" content="GitHub User" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This is application for detecting objects in real-time using any sort of camera. Usage of camera in done through openCV. Basically openCV gets a single frame from the camera and pass it to pre-trained tensorflow model. The tensorflow return the frame with objects identified in it." />
+<meta property="og:description" content="This is application for detecting objects in real-time using any sort of camera. Usage of camera in done through openCV. Basically openCV gets a single frame from the camera and pass it to pre-trained tensorflow model. The tensorflow return the frame with objects identified in it." />
+<link rel="canonical" href="http://localhost:4000/tensorflow/opencv/python/machine-learning/2020/04/14/real-time-object-detector.html" />
+<meta property="og:url" content="http://localhost:4000/tensorflow/opencv/python/machine-learning/2020/04/14/real-time-object-detector.html" />
+<meta property="og:site_name" content="TanveerJan" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-14T00:00:00+02:00" />
+<script type="application/ld+json">
+{"datePublished":"2020-04-14T00:00:00+02:00","headline":"Real-Time object detector with Tensorflow and OpenCV","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/tensorflow/opencv/python/machine-learning/2020/04/14/real-time-object-detector.html"},"url":"http://localhost:4000/tensorflow/opencv/python/machine-learning/2020/04/14/real-time-object-detector.html","author":{"@type":"Person","name":"GitHub User"},"description":"This is application for detecting objects in real-time using any sort of camera. Usage of camera in done through openCV. Basically openCV gets a single frame from the camera and pass it to pre-trained tensorflow model. The tensorflow return the frame with objects identified in it.","@type":"BlogPosting","dateModified":"2020-04-14T00:00:00+02:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<!--highlightjs Packges-->
+<link rel="stylesheet"
+      href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/styles/default.min.css">
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.16.2/build/highlight.min.js"></script>
+<!--highlightjs Packges-->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159878228-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-159878228-1');
+</script>
+
+</head>
+<body>
+	<main class="container">
+		<section class="about">
+			<img class="img-fluid" src="/assets/Profile_pic.jpg" alt="Tanveer Jan">
+			<h2><a href="https://tjan90.github.io/projects-implementations/"></a>Tanveer Jan</h2>
+			<p class="tagline">Developer</p>
+			<ul class="social"><a href="https://github.com/tjan90"><li><i class="icon-github-circled"></i></li></a><a href="https://www.linkedin.com/in/tanveer-jan-03059042/"><li><i class="icon-linkedin-squared"></i></li></a><a href="https://twitter.com/Tanveer_Jan90"><li><i class="icon-twitter-squared"></i></li></a></ul>
+			<p>&copy; 2019</p>
+		</section>
+		<section class="content">
+			<div class="post-container">
+  <a class="post-link" href="/tensorflow/opencv/python/machine-learning/2020/04/14/real-time-object-detector.html">
+    <h2 class="post-title">Real-Time object detector with Tensorflow and OpenCV</h2>
+  </a>
+  <div class="post-meta">
+    <ul class="post-categories"><li>Tensorflow</li><li>OpenCV</li><li>Python</li><li>Machine-Learning</li></ul>
+    <div class="post-date"><i class="icon-calendar"></i>Apr 14, 2020</div>
+  </div>
+  <div class="post">
+    <p>This is application for detecting objects in real-time using any sort of camera. Usage of camera in done through openCV. Basically openCV gets a single frame from the camera and pass it to pre-trained tensorflow model. The tensorflow return the frame with objects identified in it.</p>
+
+<p>Requirements:</p>
+<ul>
+  <li>Python 3.6</li>
+  <li>Tensorflow v1</li>
+  <li><a href="https://github.com/protocolbuffers/protobuf/tree/master/python">Protobuf</a></li>
+  <li>OpenCV</li>
+</ul>
+
+<p><img class="img-fluid" src="/assets/object-detector.png" alt="Tanveer Jan" /></p>
+
+<p>Here is the code</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> import numpy as np
+import os
+import six.moves.urllib as urllib
+import sys
+import tarfile
+import tensorflow.compat.v1 as tf
+
+import cv2
+from TensorFlow.models.research.object_detection.utils import label_map_util
+from TensorFlow.models.research.object_detection.utils import visualization_utils as vis_util
+
+cap = cv2.VideoCapture(0)
+sys.path.append("..")
+
+MODEL_NAME = 'rfcn_resnet101_coco_11_06_2017'
+MODEL_FILE = MODEL_NAME + '.tar.gz'
+DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
+
+# Path to frozen detection graph. This is the actual model that is used for the object detection.
+PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
+# List of the strings that is used to add correct label for each box.
+PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
+NUM_CLASSES = 90
+opener = urllib.request.URLopener()
+opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
+tar_file = tarfile.open(MODEL_FILE)
+
+for file in tar_file.getmembers():
+    file_name = os.path.basename(file.name)
+    if 'frozen_inference_graph.pb' in file_name:
+        tar_file.extract(file, os.getcwd())
+
+detection_graph = tf.Graph()
+with detection_graph.as_default():
+    od_graph_def = tf.GraphDef()
+    with tf.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
+        serialized_graph = fid.read()
+        od_graph_def.ParseFromString(serialized_graph)
+        tf.import_graph_def(od_graph_def, name='')
+
+label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
+categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
+category_index = label_map_util.create_category_index(categories)
+keep_Going = True
+counter =0
+with detection_graph.as_default():
+    with tf.Session(graph=detection_graph) as sess:
+        while keep_Going:
+            #print(counter=counter+1)
+            ret, image_np = cap.read()
+
+            # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
+            image_np_expanded = np.expand_dims(image_np, axis=0)
+            image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
+
+            # Each box represents a part of the image where a particular object was detected.
+            boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
+
+            # Each score represent how level of confidence for each of the objects.
+            # Score is shown on the result image, together with the class label.
+            scores = detection_graph.get_tensor_by_name('detection_scores:0')
+            classes = detection_graph.get_tensor_by_name('detection_classes:0')
+            num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+
+            # Actual detection.
+            (boxes, scores, classes, num_detections) = sess.run(
+                [boxes, scores, classes, num_detections],
+                feed_dict={image_tensor: image_np_expanded})
+            # Visualization of the results of a detection.
+            vis_util.visualize_boxes_and_labels_on_image_array(
+                image_np,
+                np.squeeze(boxes),
+                np.squeeze(classes).astype(np.int32),
+                np.squeeze(scores),
+                category_index,
+
+                use_normalized_coordinates=True,
+                line_thickness=8)
+
+            cv2.imshow('object detection', cv2.resize(image_np, (800,600)))
+            if cv2.waitKey(25) &amp; 0xFF == ord('q'):
+                cv2.destroyAllWindows()
+                keep_Going = False
+
+
+</code></pre></div></div>
+
+  </div></div>
+
+		</section>
+
+	</main></body>
+</html>
